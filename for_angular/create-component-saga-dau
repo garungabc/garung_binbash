@@ -122,20 +122,19 @@ grep --help > "src/app/$name_folder/$name_component/list/list.reducer.ts"
 echo "import * as _ from 'lodash';
 import { FETCH_TEST_REQUESTED } from './list.actions';
 
-  export const list = (
-    state = {
-      fetched: false,
-      items: [],
-      pagination: {}
-    },
-    action
-  ) => {
-    switch (action.type) {
-      default:
-        return state;
-    }
-  };
-);
+export const list = (
+  state = {
+    fetched: false,
+    items: [],
+    pagination: {}
+  },
+  action
+) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+};
 
 "> "src/app/$name_folder/$name_component/list/list.reducer.ts"
 
@@ -175,20 +174,19 @@ grep --help > "src/app/$name_folder/$name_component/edit/edit.reducer.ts"
 echo "import * as _ from 'lodash';
 import { FETCH_TEST_REQUESTED } from './edit.actions';
 
-  export const edit = (
-    state = {
-      fetched: false,
-      items: [],
-      pagination: {}
-    },
-    action
-  ) => {
-    switch (action.type) {
-      default:
-        return state;
-    }
-  };
-);
+export const edit = (
+  state = {
+    fetched: false,
+    items: [],
+    pagination: {}
+  },
+  action
+) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+};
 "> "src/app/$name_folder/$name_component/edit/edit.reducer.ts"
 
 # For Create
@@ -240,7 +238,6 @@ export const create = (
       return state;
   }
 };
-);
 
 "> "src/app/$name_folder/$name_component/create/create.reducer.ts"
 
