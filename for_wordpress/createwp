@@ -1,0 +1,57 @@
+#!/bin/bash
+wp core download
+echo "Download Wordpress Successful !"
+echo "============================"
+echo -e "Database Name: \c "
+read dbname
+echo "============="
+echo -e "Mysql Username: "
+read dbuser
+echo "============="
+echo -e "Mysql Password: "
+read dbpass
+echo "===================================="
+wp core config --dbname=$dbname --dbuser=$dbuser --dbpass=$dbpass
+echo "Create wp-config.php is complete !!!"
+echo "===================================="
+wp db drop --yes
+wp db create
+echo "Admin Account: "
+read useradmin
+echo "============="
+echo "Email Admin: "
+read email
+echo "============="
+echo "Admin Password:"
+read passadmin
+echo "============="
+echo "Domain website: "
+read domain
+echo "==================================="
+wp core install --url=$domain  --title="My Site" --admin_user=$useradmin --admin_password=$passadmin --admin_email=$email
+echo "Create admin account successful !!!"
+echo "==================================="
+grep --help > .htaccess
+echo "# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# END WordPress" > .htaccess
+echo "Created .htaccess successfully !!!"
+echo "================================="
+
+echo -e "Folder project (parent/name_folder): "
+read folder
+sudo createdomain $domain $folder
+echo "Created virtual domain successfully !!!"
+echo "================================="
+mkdir database
+cd database/
+wp db export
+cd ../
+echo "=========== END ================="

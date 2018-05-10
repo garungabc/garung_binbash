@@ -1,0 +1,6 @@
+#!/bin/bash
+link="database/*.sql"
+wp db reset --yes
+wp db import $link
+wp search-replace $1 $2
+echo "========== import success ==========="

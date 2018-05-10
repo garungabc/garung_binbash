@@ -1,0 +1,17 @@
+#!/bin/bash
+conf="/etc/apache2/sites-available/"
+if [ -f $conf/$1.conf ];then
+        exit 1
+else
+cat > $conf/$1.conf <<-EOD
+<VirtualHost *:80>
+        ServerName $1
+        ServerAlias www.$1
+        DocumentRoot /var/www/html/$2/
+        ErrorLog /var/www/html/logs/$1_error.log
+        CustomLog /var/www/html/logs/$1_access.log combined
+</VirtualHost>
+EOD
+fi
+a2ensite $1.conf
+service apache2 reload

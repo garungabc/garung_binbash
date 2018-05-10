@@ -1,0 +1,23 @@
+echo "================================="
+echo -e "Mysql Name: "
+read dbname
+echo "================================="
+echo -e "Mysql Username: "
+read dbuser
+echo "================================="
+echo -e "Mysql password: "
+read dbuser
+echo "==================================="
+grep --help > .htaccess
+echo "
+Options +FollowSymLinks
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L] > .htaccess
+echo "Created .htaccess successfully !!!"
+echo "==================================="
+mysql -u $dbuser -p
+CREATE DATABASE IF NOT EXISTS $dbname;
+echo "Create admin account successful !!!"

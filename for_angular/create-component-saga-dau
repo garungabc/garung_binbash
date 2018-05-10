@@ -1,0 +1,249 @@
+#!/bin/bash
+cd ../
+name_folder="components"
+echo "Please Enter - NAME COMPONENT:"
+read name_component
+
+ng g component $name_folder/$name_component 
+ng g component $name_folder/$name_component/list
+ng g component $name_folder/$name_component/edit
+ng g component $name_folder/$name_component/create
+
+ng g module $name_folder/$name_component --routing
+
+echo "Create Component successful !!!"
+echo "==================================="
+
+actions_file="src/app/$name_folder/$name_component/$name_component.actions.ts"
+list_action="src/app/$name_folder/$name_component/list/list.actions.ts"
+edit_action="src/app/$name_folder/$name_component/edit/edit.actions.ts"
+create_action="src/app/$name_folder/$name_component/create/create.actions.ts"
+
+#================================
+if [ -e $actions_file ]; then
+  echo "File $actions_file already exists!"
+else
+  echo >> $actions_file
+fi
+grep --help > $actions_file
+echo "export const FETCH_TEST_REQUESTED = 'FETCH_TEST_REQUESTED';
+" > $actions_file
+#===============================
+
+if [ -e $list_action ]; then
+  echo "File $list_action already exists!"
+else
+  echo >> $list_action
+fi
+grep --help > $list_action
+echo "export const FETCH_TEST_REQUESTED = 'FETCH_TEST_REQUESTED';
+" > $list_action
+#===============================
+
+if [ -e $edit_action ]; then
+  echo "File $edit_action already exists!"
+else
+  echo >> $edit_action
+fi
+grep --help > $edit_action
+echo "export const FETCH_TEST_REQUESTED = 'FETCH_TEST_REQUESTED';
+" > $edit_action
+#===============================
+
+if [ -e $create_action ]; then
+  echo "File $create_action already exists!"
+else
+  echo >> $create_action
+fi
+grep --help > $create_action
+echo "export const FETCH_TEST_REQUESTED = 'FETCH_TEST_REQUESTED';
+" > $create_action
+#================================
+
+# For main
+
+grep --help > "src/app/$name_folder/$name_component/$name_component.saga.ts"
+echo "import * as _ from 'lodash';
+import listUserSaga from './list/list.saga';
+import createUser from './create/create.saga';
+import editUser from './edit/edit.saga';
+import { fork } from 'redux-saga/effects';
+
+export default _.map([...listUserSaga, ...createUser, ...editUser], item => fork(item));
+" > "src/app/$name_folder/$name_component/$name_component.saga.ts"
+
+grep --help > "src/app/$name_folder/$name_component/$name_component.reducer.ts"
+echo "import { combineReducers } from 'redux';
+import { list } from './list/list.reducer';
+import { create } from './create/create.reducer';
+import { edit } from './edit/edit.reducer';
+import * as _ from 'lodash';
+
+export const $name_component = combineReducers({
+  list,
+  create,
+  edit,
+});
+" > "src/app/$name_folder/$name_component/$name_component.reducer.ts"
+
+# For List
+
+grep --help > "src/app/$name_folder/$name_component/list/list.saga.ts"
+echo "import { Router } from '@angular/router';
+import { API_CALL_ERROR } from './../../../store/action';
+import { PreloaderService } from './../../../common/services/preloader/preloader.service';
+import { AppInjector } from './../../../app-injector';
+import { takeEvery, put } from 'redux-saga/effects';
+import { ApiService } from '../../../api/api.service';
+import * as _ from 'lodash';
+import { NotificationService } from '../../../common/services/notification/notification.service';
+import { FETCH_TEST_REQUESTED } from './list.actions';
+
+function* getTest(action) {
+  try {
+    /*const result = yield AppInjector.get(ApiService).category.list().toPromise();
+    yield put({
+      type: 'TEST',
+      data: result
+    }); */
+  } catch (error) {
+    yield put({ type: API_CALL_ERROR, error: error });
+  }
+}
+
+function* watchFetchTestSuccess() {
+  /*yield takeEvery(FETCH_TEST_REQUESTED, getTest);*/
+}
+
+export default [watchFetchTestSuccess];
+" > "src/app/$name_folder/$name_component/list/list.saga.ts"
+
+grep --help > "src/app/$name_folder/$name_component/list/list.reducer.ts"
+echo "import * as _ from 'lodash';
+import { FETCH_TEST_REQUESTED } from './list.actions';
+
+  export const list = (
+    state = {
+      fetched: false,
+      items: [],
+      pagination: {}
+    },
+    action
+  ) => {
+    switch (action.type) {
+      default:
+        return state;
+    }
+  };
+);
+
+"> "src/app/$name_folder/$name_component/list/list.reducer.ts"
+
+# For Edit
+
+grep --help > "src/app/$name_folder/$name_component/edit/edit.saga.ts"
+echo "import { Router } from '@angular/router';
+import { API_CALL_ERROR } from './../../../store/action';
+import { PreloaderService } from './../../../common/services/preloader/preloader.service';
+import { AppInjector } from './../../../app-injector';
+import { takeEvery, put } from 'redux-saga/effects';
+import { ApiService } from '../../../api/api.service';
+import * as _ from 'lodash';
+import { NotificationService } from '../../../common/services/notification/notification.service';
+import { FETCH_TEST_REQUESTED } from './edit.actions';
+
+function* getTest(action) {
+  try {
+    /*const result = yield AppInjector.get(ApiService).category.list().toPromise();
+    yield put({
+      type: 'TEST',
+      data: result
+    }); */
+  } catch (error) {
+    yield put({ type: API_CALL_ERROR, error: error });
+  }
+}
+
+function* watchFetchTestSuccess() {
+  /*yield takeEvery(FETCH_TEST_REQUESTED, getTest);*/
+}
+
+export default [watchFetchTestSuccess];
+" > "src/app/$name_folder/$name_component/edit/edit.saga.ts"
+
+grep --help > "src/app/$name_folder/$name_component/edit/edit.reducer.ts"
+echo "import * as _ from 'lodash';
+import { FETCH_TEST_REQUESTED } from './edit.actions';
+
+  export const edit = (
+    state = {
+      fetched: false,
+      items: [],
+      pagination: {}
+    },
+    action
+  ) => {
+    switch (action.type) {
+      default:
+        return state;
+    }
+  };
+);
+"> "src/app/$name_folder/$name_component/edit/edit.reducer.ts"
+
+# For Create
+
+grep --help > "src/app/$name_folder/$name_component/create/create.saga.ts"
+echo "import { Router } from '@angular/router';
+import { API_CALL_ERROR } from './../../../store/action';
+import { PreloaderService } from './../../../common/services/preloader/preloader.service';
+import { AppInjector } from './../../../app-injector';
+import { takeEvery, put } from 'redux-saga/effects';
+import { ApiService } from '../../../api/api.service';
+import * as _ from 'lodash';
+import { NotificationService } from '../../../common/services/notification/notification.service';
+import { FETCH_TEST_REQUESTED } from './create.actions';
+
+function* getTest(action) {
+  try {
+    /*const result = yield AppInjector.get(ApiService).category.list().toPromise();
+    yield put({
+      type: 'TEST',
+      data: result
+    }); */
+  } catch (error) {
+    yield put({ type: API_CALL_ERROR, error: error });
+  }
+}
+
+function* watchFetchTestSuccess() {
+  /*yield takeEvery(FETCH_TEST_REQUESTED, getTest);*/
+}
+
+export default [watchFetchTestSuccess];
+" > "src/app/$name_folder/$name_component/create/create.saga.ts"
+
+grep --help > "src/app/$name_folder/$name_component/create/create.reducer.ts"
+echo "import * as _ from 'lodash';
+import { FETCH_TEST_REQUESTED } from './create.actions';
+
+export const create = (
+  state = {
+    fetched: false,
+    items: [],
+    pagination: {}
+  },
+  action
+) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+};
+);
+
+"> "src/app/$name_folder/$name_component/create/create.reducer.ts"
+
+echo "================================="
+echo "====== DONE - DONE - DONE ======="
+echo "================================="

@@ -1,0 +1,13 @@
+#! /bin/bash
+
+url="/var/www/html/backup_database/"
+
+cd $url
+#git -c gc.reflogExpire=0 -c gc.reflogExpireUnreachable=0 -c gc.rerereresolved=0 -c gc.rerereunresolved=0 -c gc.pruneExpire=now gc "$@"
+git reflog expire --expire=now --all
+git repack -ad
+git prune
+git add .
+git commit -m "backup db from vultr vps"
+git push origin master
+exit

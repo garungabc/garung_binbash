@@ -1,0 +1,58 @@
+#!/bin/bash
+echo "========= BEGIN =========="
+FILECONF="wp-config.php"
+if [ ! -f $FILECONF ]; then
+    echo "============================"
+    echo "Database Name: \c "
+    read dbname
+    echo "============="
+    echo -e "Mysql Username: \c"
+    read dbuser
+    echo "============="
+    echo -e "Mysql Password: \c"
+    read dbpass
+    echo "===================================="
+    wp core config --dbname=$dbname --dbuser=$dbuser --dbpass=$dbpass
+    echo "Create wp-config.php is complete !!!"
+    echo "===================================="
+fi
+wp db create
+FILEHTACCES=".htaccess"
+if [ ! -f $FILEHTACCESS ]; then
+    grep --help > .htaccess
+    echo "# BEGIN WordPress
+    <IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.php$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.php [L]
+    </IfModule>
+    # END WordPress" > .htaccess
+    echo "Created .htaccess successfully !!!"
+    echo "================================="
+fi
+echo "Domain website: \c"
+read domain
+echo "================================="
+echo "Folder project (parent/name_folder): \c"
+read folder
+sudo createdomain $domain $folder
+echo "Created virtual domain successfully !!!"
+echo "================================="
+FILEDB="database/*.sql"
+if [ -f $FILEDB ]; then
+   wp db reset --yes
+   wp db import $FILEDB
+else
+   echo "File $FILEDB does not exist."
+fi
+echo "Are you run composer install ? (Y/N): \c"
+read confirmComposer
+echo "Type name your themes: \c"
+read namethemes
+if [ "$confirmComposer" == "Y" ]; then
+    cd wp-content/themes/$namethemes
+    composer install
+fi
